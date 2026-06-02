@@ -147,7 +147,7 @@ The dashboard provides:
 
 ### Dashboard Preview
 
-`Web_Dashboard.jpg`
+![Web Dashboard Preview](Web_Dashboard.jpg)
 
 ---
 

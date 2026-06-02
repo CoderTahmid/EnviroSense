@@ -11,8 +11,8 @@
 #define MISO  19
 #define MOSI  27
 #define BUZZER_PIN 25
-const char* WIFI_SSID = "Phantom Stranger";
-const char* WIFI_PASS = "#Hwf@056";
+const char* WIFI_SSID = "Arghya";
+const char* WIFI_PASS = "1234567778";
 WebServer server(80);
 Preferences prefs;
 struct TreeRow {
@@ -487,7 +487,7 @@ void setup() {
   SPI.begin(SCK, MISO, MOSI, SS);
   LoRa.setPins(SS, RST, DIO0);
   Serial.println("LoRa Receiver Initializing...");
-  if (!LoRa.begin(433E6)) {
+  if 4(!LoRa.begin(433E6)) {
     Serial.println("LoRa init failed!");
     while (1);
   }

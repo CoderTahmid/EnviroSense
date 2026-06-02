@@ -97,8 +97,7 @@ void loop() {
 
   // ── 2. Flame Sensor Data ───────────────────────────────────
   int flameRaw = analogRead(FLAME_PIN);          // 0–4095 (12-bit ADC)
-  // float flameVoltage = (flameRaw / 4095.0) * 3.3;
-  // Lower raw value = more IR light = stronger flame detected
+
   const char* flameStatus = (flameRaw < 1500)
                           ? "FLAME DETECTED"
                           : "NO FLAME";
@@ -128,7 +127,6 @@ void loop() {
           vibStatus);
 
 
-  // if(((flameRaw < 1500) || (vibrationState == HIGH) || (tiltAngle > 50)) && (flm || vib || gyro)){
 
     String pac = "000";
     bool is_trigger = false;
@@ -185,47 +183,3 @@ void loop() {
       }
     }
   }
-
-  // delay(50);   // then repeat
-
-
-
-
-
-  
-
-  
-  // Serial.println("Sending packet...");
-
-  // // Print to Serial Monitor
-  // Serial.print(MPU6050Data);
-  // Serial.print(Flame_data);
-  // Serial.print(Viberatio_data);
-
-
-  // // Send via LoRa
-  // LoRa.beginPacket();
-  // LoRa.print(MPU6050Data);
-  // LoRa.print(Flame_data);
-  // LoRa.print(Viberatio_data);
-  // LoRa.endPacket();
-
-
-  delay(50);
-}
-
-
-// if (abs(gyroX) > 50 || abs(gyroY) > 50) {
-//         Serial.println("VIBRATION DETECTED: Possible cutting!");
-//     }
-
-//     // 2. Detect Wind (Slower, rhythmic swaying)
-//     else if (abs(accelX) > 0.15 || abs(accelY) > 0.15) {
-//         Serial.println("WIND: Tree is swaying.");
-//     }
-
-//     // 3. Detect Falling (The 'Gravity' vector has shifted significantly)
-//     // If the tree was vertical, Accel Z was ~1.0. If it falls, Z drops toward 0.
-//     if (accelZ < 0.5) {
-//         Serial.println("CRITICAL: TREE IS BEING CUT / FALLING!");
-//     }

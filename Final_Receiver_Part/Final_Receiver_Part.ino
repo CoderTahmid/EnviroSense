@@ -11,8 +11,8 @@
 #define MISO  19
 #define MOSI  27
 #define BUZZER_PIN 25
-const char* WIFI_SSID = "Arghya";
-const char* WIFI_PASS = "1234567778";
+const char* WIFI_SSID = "Akbaria";
+const char* WIFI_PASS = "TB@2023#";
 WebServer server(80);
 Preferences prefs;
 struct TreeRow {
@@ -222,12 +222,6 @@ String csvEscape(const String& s) {
   return "\"" + out + "\"";
 }
 // Raw sensor status — used for CSV logging only
-// String currentStatus(const TreeRow& r) {
-//   if (r.flame)             return "Fire";
-//   if (r.fall && r.vibrate) return "Cutted";
-//   if (r.fall)              return "Fall in storm";
-//   return "Healthy";
-// }
 String currentStatus(const TreeRow& r) {
   if (r.fall && r.vibrate) return "Cutted";
   if (r.fall)              return "Fall in storm";
@@ -336,20 +330,12 @@ void updateTreeState(uint8_t idx, bool flame, bool vibrate, bool fall) {
   }
   // Sensors physically returned to normal — fully re-arm for the next event
   if (!rawAlert) {
-    // r.eventLatched        = false;
-    // r.visibleAlert        = false;
-    // r.actionTaken         = false;
-    // r.suppressUntilNormal = false;
     r.eventLatched        = false;
     r.visibleAlert        = false;
     r.actionTaken         = false;
     r.suppressUntilNormal = false;
     buzzerActive          = false;
     digitalWrite(BUZZER_PIN, LOW);
-    // // Notify the sensor node via LoRa
-    // LoRa.beginPacket();
-    // LoRa.print("1");
-    // LoRa.endPacket();
     sendAck();          // ← replaces the 3 LoRa lines
   }
   saveRow(idx);
@@ -412,20 +398,12 @@ void handleAction() {
   }
   TreeRow &r = rows[id];
   if (r.active) {
-    // r.visibleAlert        = false;
-    // r.actionTaken         = true;
-    // r.suppressUntilNormal = true;
-    // saveRow(id);
     r.visibleAlert        = false;
     r.actionTaken         = true;
     r.suppressUntilNormal = true;
     saveRow(id);
     buzzerActive = false;
     digitalWrite(BUZZER_PIN, LOW);
-    // // Notify the sensor node via LoRa
-    // LoRa.beginPacket();
-    // LoRa.print("1");
-    // LoRa.endPacket();
     sendAck();          // ← replaces the 3 LoRa lines
   }
   server.send(200, "application/json", "{\"ok\":true}");
@@ -474,7 +452,6 @@ void readSensorsAndUpdate() {
       bool is_flame    = (pac[0] == '1');
       bool is_vibrate  = (pac[1] == '1');
       bool is_fall     = (pac[2] == '1');
-      // updateTreeState(0, is_flame, is_vibrate, is_fall);
       rows[0].eventLatched = false;   // re-arm before each packet
       updateTreeState(0, is_flame, is_vibrate, is_fall);
     }
@@ -487,7 +464,7 @@ void setup() {
   SPI.begin(SCK, MISO, MOSI, SS);
   LoRa.setPins(SS, RST, DIO0);
   Serial.println("LoRa Receiver Initializing...");
-  if 4(!LoRa.begin(433E6)) {
+  if (!LoRa.begin(433E6)) {
     Serial.println("LoRa init failed!");
     while (1);
   }
@@ -525,11 +502,6 @@ void updateBuzzer() {
     lastBuzzMs = now;
   }
 }
-
-// void loop() {
-//   server.handleClient();
-//   readSensorsAndUpdate();
-// }
 
 void loop() {
   server.handleClient();
